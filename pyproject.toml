@@ -1,0 +1,22 @@
+[project]
+name = "router-agent"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "NamitChauhan81", email = "namitchauhan81@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "langchain-core>=1.6.3",
+    "langchain-google-genai>=4.4.0",
+    "langgraph>=1.2.11",
+    "python-dotenv>=1.2.3",
+]
+
+[project.scripts]
+router-agent = "router_agent:main"
+
+[build-system]
+requires = ["uv_build>=0.12.9,<0.13.0"]
+build-backend = "uv_build"

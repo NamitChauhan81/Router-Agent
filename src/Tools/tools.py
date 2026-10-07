@@ -1,4 +1,5 @@
 from langchain_core.tools import tool
+from langgraph.prebuilt import ToolNode, tools_condition
 import math
 
 @tool 
@@ -40,3 +41,14 @@ def Purchase_Stocks(stock_symbol: str, quantity : int)-> str:
 
         return f"purchase order placed for {quantity} shares of {stock_symbol}"
 
+Email_Tools = [Send_Email]
+
+Stock_Tools = [get_current_stock_price, Purchase_Stocks, calculator]
+
+General_Tools = [get_weather, calculator]
+
+Email_Tool_Node = ToolNode(Email_Tools)
+
+Stock_Tool_Node = ToolNode(Stock_Tools)
+
+General_Tool_Node = ToolNode(General_Tools)

@@ -20,7 +20,7 @@ load_dotenv()
 # General_Tool_Node = ToolNode(General_Tools)
 
 
-llm = ChatGoogleGenerativeAI(model = "gemini-3-flash-preview")
+llm = ChatGoogleGenerativeAI(model = "gemini-2.5-flash")
 
 Email_llm = llm.bind_tools(Email_Tools)
 
@@ -74,27 +74,25 @@ def Coding_Agent(state:Router_Agent_State):
   query = state["messages"][-1]
 
   prompt = f"""You are a coding specialist 
-  give a appropriate solution to the user query.
+  give a short and appropriate solution with respect to user query.
 
   query: {query}
   """
   answer = llm.invoke(prompt)
-
-  final_ansewr = answer.content
-  return {"messages":[final_ansewr]}
+  return {"messages":[answer]}
 
 def SQL_Agent(state : Router_Agent_State):
     query = state["messages"][-1]
     prompt = f"""You are a SQL specialist if the user qurey related to Database or SQL,
-    Give the appropriate solution.
+    Give a short and appropriate solution with respect to user query.
     query : {query}
     """
 
     result = llm.invoke(prompt)
 
-    final_result = result.content
+  
 
-    return{"messages": [final_result]}
+    return{"messages": [result]}
 
 
 
@@ -102,7 +100,7 @@ def SQL_Agent(state : Router_Agent_State):
 def Research_Agent(state : Router_Agent_State):
     query = state["messages"][-1]
     prompt = f"""You are a Research specialist,
-    Give a concise and conceptual explanation about the below context.
+    Give a short, concise and conceptual explanation about the below context.
 
     context : {query}
   
@@ -110,9 +108,8 @@ def Research_Agent(state : Router_Agent_State):
 
     result = llm.invoke(prompt)
 
-    final_result = result.content
 
-    return{"messages": [final_result]}
+    return{"messages": [result]}
 
 
 def General_Agent(state : Router_Agent_State):

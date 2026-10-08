@@ -70,7 +70,3 @@ graph.add_edge("General_Tool_Node", "General_Agent")
 
 workflow = graph.compile(checkpointer=memory)
 
-config = {"configurable":{"thread_id": "test004"}}
-
-response = workflow.invoke({"messages":[HumanMessage(content ="What is the current weather of New Delhi.")]}, config=config)
-print(response)

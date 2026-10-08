@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Router Agent | Luxury Glass Workbench</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'SFMono-Regular', 'Consolas', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f5f3ff',
+                            100: '#ede9fe',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
+                        },
+                        pearl: {
+                            50: '#fafafa',
+                            100: '#f4f4f5',
+                            200: '#e4e4e7',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- React & Babel CDNs -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Marked.js for Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <!-- Highlight.js for Syntax Highlighting (Light GitHub Theme) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Custom Liquid Glass CSS Styling -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            background-image: 
+                radial-gradient(at 10% 10%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
+                radial-gradient(at 90% 15%, rgba(168, 85, 247, 0.08) 0px, transparent 50%),
+                radial-gradient(at 50% 95%, rgba(59, 130, 246, 0.1) 0px, transparent 50%),
+                radial-gradient(at 80% 50%, rgba(236, 72, 153, 0.06) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.3);
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.4);
+        }
+
+        /* Liquid Glass Panels */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.68);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.85);
+            box-shadow: 
+                0 20px 40px -15px rgba(99, 102, 241, 0.07),
+                0 0 0 1px rgba(255, 255, 255, 0.9) inset;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(16px) saturate(160%);
+            -webkit-backdrop-filter: blur(16px) saturate(160%);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 
+                0 10px 25px -5px rgba(15, 23, 42, 0.04),
+                0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+        }
+
+        .glass-input-capsule {
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(24px) saturate(200%);
+            -webkit-backdrop-filter: blur(24px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.95);
+            box-shadow: 
+                0 20px 40px -10px rgba(99, 102, 241, 0.12),
+                0 2px 6px rgba(15, 23, 42, 0.03),
+                inset 0 1px 1px rgba(255, 255, 255, 1);
+        }
+
+        /* Liquid Primary Glass Button */
+        .glass-button-primary {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 50%, #4338ca 100%);
+            box-shadow: 
+                0 8px 20px -4px rgba(99, 102, 241, 0.4),
+                inset 0 1px 1px 0 rgba(255, 255, 255, 0.4);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .glass-button-primary:hover {
+            transform: translateY(-1px) scale(1.01);
+            box-shadow: 
+                0 12px 28px -4px rgba(99, 102, 241, 0.5),
+                inset 0 1px 1px 0 rgba(255, 255, 255, 0.6);
+        }
+        .glass-button-primary:active {
+            transform: translateY(1px) scale(0.99);
+        }
+
+        /* Glass Secondary Pill Button */
+        .glass-pill {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            transition: all 0.2s ease;
+        }
+        .glass-pill:hover {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(99, 102, 241, 0.3);
+            transform: translateY(-1px);
+        }
+
+        /* Markdown styling overrides for Light Theme */
+        .markdown-body {
+            color: #1e293b;
+            font-size: 0.925rem;
+            line-height: 1.6;
+        }
+        .markdown-body p {
+            margin-bottom: 0.75rem;
+        }
+        .markdown-body p:last-child {
+            margin-bottom: 0;
+        }
+        .markdown-body pre {
+            background: #0f172a !important;
+            color: #f8fafc;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            overflow-x: auto;
+            margin-top: 0.5rem;
+            margin-bottom: 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+        }
+        .markdown-body code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.825rem;
+        }
+        .markdown-body p code, .markdown-body inline-code {
+            background: rgba(99, 102, 241, 0.08);
+            color: #4338ca;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            border: 1px solid rgba(99, 102, 241, 0.15);
+        }
+        .markdown-body ul { list-style-type: disc; padding-left: 1.25rem; margin-bottom: 0.75rem; }
+        .markdown-body ol { list-style-type: decimal; padding-left: 1.25rem; margin-bottom: 0.75rem; }
+    </style>
+</head>
+<body class="h-screen overflow-hidden text-slate-800 antialiased selection:bg-indigo-500 selection:text-white">
+    <div id="root" class="h-full w-full"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef, useMemo } = React;
+
+        // SVG Icon Library
+        const SparklesIcon = ({ className = "w-5 h-5" }) => (
+            <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+            </svg>
+        );
+
+        const BotIcon = ({ className = "w-5 h-5" }) => (
+            <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+            </svg>
+        );
+
+        const UserIcon = ({ className = "w-5 h-5" }) => (
+            <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+        );
+
+        const SendIcon = ({ className = "w-4 h-4" }) => (
+            <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+            </svg>
+        );
+
+        const SettingsIcon = ({ className = "w-5 h-5" }) => (
+            <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+        );
+
+        const TerminalIcon = ({ className = "w-5 h-5" }) => (
+            <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+        );
+
+        const HelpCircleIcon = ({ className = "w-5 h-5" }) => (
+            <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+        );
+
+        const PlusIcon = ({ className = "w-5 h-5" }) => (
+            <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+            </svg>
+        );
+
+        const TrashIcon = ({ className = "w-4 h-4" }) => (
+            <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+        );
+
+        const RefreshIcon = ({ className = "w-4 h-4" }) => (
+            <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+        );
+
+        const CopyIcon = ({ className = "w-4 h-4" }) => (
+            <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+        );
+
+        const CheckIcon = ({ className = "w-4 h-4" }) => (
+            <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+        );
+
+        const AlertTriangleIcon = ({ className = "w-5 h-5" }) => (
+            <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+        );
+
+        const XIcon = ({ className = "w-5 h-5" }) => (
+            <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        );
+
+        function generateUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        const ChatMessage = ({ message }) => {
+            const isUser = message.role === 'user';
+            const [copied, setCopied] = useState(false);
+
+            const renderedMarkdown = useMemo(() => {
+                if (isUser) return message.content;
+                try {
+                    marked.setOptions({
+                        highlight: function(code, lang) {
+                            if (lang && hljs.getLanguage(lang)) {
+                                return hljs.highlight(code, { language: lang }).value;
+                            }
+                            return hljs.highlightAuto(code).value;
+                        },
+                        breaks: true
+                    });
+                    return marked.parse(message.content || '');
+                } catch (e) {
+                    return message.content;
+                }
+            }, [message.content, isUser]);
+
+            const handleCopy = () => {
+                navigator.clipboard.writeText(message.content);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+            };
+
+            return (
+                <div className={`flex gap-3 my-5 ${isUser ? 'justify-end' : 'justify-start'}`}>
+                    {!isUser && (
+                        <div className="w-9 h-9 rounded-2xl bg-gradient-to-tr from-indigo-500 to-indigo-600 text-white flex items-center justify-center shrink-0 shadow-md shadow-indigo-500/20 border border-white/80">
+                            <BotIcon className="w-5 h-5" />
+                        </div>
+                    )}
+
+                    <div className={`group relative max-w-[82%] rounded-3xl p-5 transition-all ${
+                        isUser 
+                            ? 'glass-button-primary text-white rounded-tr-xs' 
+                            : 'glass-card text-slate-800 rounded-tl-xs'
+                    }`}>
+                        <div className="flex items-center justify-between gap-4 mb-2 text-[11px] opacity-75 font-medium tracking-wide">
+                            <span className="uppercase tracking-wider">{isUser ? 'You' : 'Router Agent'}</span>
+                            <div className="flex items-center gap-2">
+                                <span>{message.timestamp || new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                                <button 
+                                    onClick={handleCopy}
+                                    title="Copy content"
+                                    className="opacity-0 group-hover:opacity-100 hover:text-white transition-opacity p-1 rounded-md"
+                                >
+                                    {copied ? <CheckIcon className="w-3.5 h-3.5 text-emerald-300" /> : <CopyIcon className="w-3.5 h-3.5" />}
+                                </button>
+                            </div>
+                        </div>
+
+                        {isUser ? (
+                            <div className="whitespace-pre-wrap text-sm leading-relaxed">{message.content}</div>
+                        ) : (
+                            <div 
+                                className="markdown-body text-sm leading-relaxed" 
+                                dangerouslySetInnerHTML={{ __html: renderedMarkdown }}
+                            />
+                        )}
+
+                        {message.isError && (
+                            <div className="mt-3 p-3 rounded-2xl bg-red-50/80 border border-red-200 text-red-700 text-xs flex items-start gap-2.5 shadow-sm">
+                                <AlertTriangleIcon className="w-4 h-4 shrink-0 text-red-500 mt-0.5" />
+                                <div>
+                                    <div className="font-semibold mb-0.5">Execution Error</div>
+                                    <p className="opacity-90">{message.errorDetails || "Failed to complete communication with FastAPI."}</p>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {isUser && (
+                        <div className="w-9 h-9 rounded-2xl bg-slate-900 text-white flex items-center justify-center shrink-0 shadow-md border border-slate-700/50">
+                            <UserIcon className="w-5 h-5" />
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const DebugInspector = ({ logs, isOpen, onClose, onClearLogs }) => {
+            const [selectedLogIndex, setSelectedLogIndex] = useState(0);
+
+            if (!isOpen) return null;
+            const activeLog = logs[selectedLogIndex];
+
+            return (
+                <div className="fixed inset-y-0 right-0 w-full sm:w-[500px] glass-panel border-l border-white/80 shadow-2xl z-40 flex flex-col backdrop-blur-2xl transition-all">
+                    {/* Drawer Header */}
+                    <div className="p-4 border-b border-slate-200/60 flex items-center justify-between bg-white/40">
+                        <div className="flex items-center gap-2">
+                            <div className="p-2 bg-indigo-50 text-indigo-600 rounded-xl border border-indigo-100">
+                                <TerminalIcon className="w-5 h-5" />
+                            </div>
+                            <div>
+                                <h2 className="font-bold text-slate-800 text-sm">Dev API Inspector</h2>
+                                <p className="text-[10px] text-slate-500">Live request payload & server response</p>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            {logs.length > 0 && (
+                                <button 
+                                    onClick={onClearLogs}
+                                    className="px-2.5 py-1 text-xs text-slate-600 hover:bg-slate-200/60 rounded-lg transition-colors font-medium"
+                                >
+                                    Clear
+                                </button>
+                            )}
+                            <button onClick={onClose} className="p-1.5 text-slate-500 hover:bg-slate-200/60 rounded-xl">
+                                <XIcon className="w-5 h-5" />
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Content */}
+                    <div className="flex-1 flex flex-col overflow-hidden">
+                        {logs.length === 0 ? (
+                            <div className="flex-1 flex flex-col items-center justify-center p-6 text-center text-slate-400">
+                                <TerminalIcon className="w-12 h-12 text-slate-300 mb-3 stroke-1" />
+                                <p className="text-sm font-semibold text-slate-600">No Logs Captured Yet</p>
+                                <p className="text-xs text-slate-400 mt-1 max-w-xs">Send a message in the chat to test payload serialization and route responses.</p>
+                            </div>
+                        ) : (
+                            <div className="flex-1 flex flex-col overflow-hidden">
+                                <div className="border-b border-slate-200/60 p-2 flex gap-2 overflow-x-auto bg-slate-100/30 shrink-0">
+                                    {logs.map((log, idx) => (
+                                        <button
+                                            key={idx}
+                                            onClick={() => setSelectedLogIndex(idx)}
+                                            className={`px-3 py-1.5 rounded-xl text-xs font-mono shrink-0 transition-all border ${
+                                                selectedLogIndex === idx
+                                                    ? 'bg-white text-indigo-600 border-indigo-200 shadow-sm font-bold'
+                                                    : 'bg-white/40 text-slate-500 border-transparent hover:bg-white/80'
+                                            }`}
+                                        >
+                                            <span className={`inline-block w-2 h-2 rounded-full mr-1.5 ${
+                                                log.status === 200 ? 'bg-emerald-500' : 'bg-red-500'
+                                            }`} />
+                                            #{logs.length - idx} • {log.duration}ms
+                                        </button>
+                                    ))}
+                                </div>
+
+                                {activeLog && (
+                                    <div className="flex-1 overflow-y-auto p-4 space-y-4 font-mono text-xs">
+                                        <div className="p-3 bg-white/80 rounded-2xl border border-slate-200/80 shadow-xs space-y-1.5">
+                                            <div className="flex justify-between items-center text-slate-700">
+                                                <span className="font-bold text-indigo-600">POST {activeLog.url}</span>
+                                                <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                                                    activeLog.status === 200 ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'
+                                                }`}>
+                                                    HTTP {activeLog.status || 'FAIL'}
+                                                </span>
+                                            </div>
+                                            <div className="flex justify-between text-slate-500 text-[11px]">
+                                                <span>Latency: {activeLog.duration}ms</span>
+                                                <span>Timestamp: {activeLog.timestamp}</span>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <div className="flex justify-between items-center mb-1 text-slate-600 font-sans font-semibold text-xs">
+                                                <span>Request Body Payload</span>
+                                                <button 
+                                                    onClick={() => navigator.clipboard.writeText(JSON.stringify(activeLog.requestBody, null, 2))}
+                                                    className="text-[11px] text-indigo-600 hover:underline flex items-center gap-1"
+                                                >
+                                                    <CopyIcon className="w-3 h-3" /> Copy JSON
+                                                </button>
+                                            </div>
+                                            <pre className="bg-slate-900 p-3.5 rounded-2xl text-slate-200 overflow-x-auto leading-relaxed shadow-inner">
+                                                {JSON.stringify(activeLog.requestBody, null, 2)}
+                                            </pre>
+                                        </div>
+
+                                        <div>
+                                            <div className="flex justify-between items-center mb-1 text-slate-600 font-sans font-semibold text-xs">
+                                                <span>Response Payload</span>
+                                            </div>
+                                            <pre className="bg-slate-900 p-3.5 rounded-2xl text-emerald-400 overflow-x-auto leading-relaxed shadow-inner">
+                                                {JSON.stringify(activeLog.responseBody, null, 2)}
+                                            </pre>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
+        const SetupGuideModal = ({ isOpen, onClose, baseUrl }) => {
+            const [copied, setCopied] = useState(false);
+            if (!isOpen) return null;
+
+            const pythonSnippet = `from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from langchain_core.messages import HumanMessage
+from pydantic import BaseModel
+from typing import List, Dict
+
+app = FastAPI(title="Router-Agent_Backend")
+
+# Mandatory CORS configuration for liquid frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+class ChatRequest(BaseModel):
+    messages: List[Dict[str, str]]
+    thread_id: str = "default_thread"
+
+@app.post("/chat")
+def ChatEndPoint(request: ChatRequest):
+    try:
+        thread_ID = request.thread_id
+        config = {"configurable": {"thread_id": thread_ID}}
+        formatted_message = [HumanMessage(content=msg["content"]) for msg in request.messages]
+        
+        # Invoke workflow
+        # response = workflow.invoke({"messages": formatted_message}, config=config)
+        # final_result = response["messages"][-1].content
+        
+        return {
+            "reply": "Agent workflow response here",
+            "thread_id": thread_ID
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))`;
+
+            return (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/30 backdrop-blur-md">
+                    <div className="glass-panel rounded-3xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden border border-white">
+                        <div className="p-5 border-b border-slate-200/60 flex justify-between items-center bg-white/60">
+                            <div className="flex items-center gap-3">
+                                <div className="p-2.5 bg-indigo-50 text-indigo-600 rounded-2xl border border-indigo-100">
+                                    <HelpCircleIcon className="w-5 h-5" />
+                                </div>
+                                <div>
+                                    <h3 className="text-base font-bold text-slate-800">FastAPI Integration Setup</h3>
+                                    <p className="text-xs text-slate-500">How to launch and connect your agent workflow</p>
+                                </div>
+                            </div>
+                            <button onClick={onClose} className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-200/50 rounded-xl">
+                                <XIcon className="w-5 h-5" />
+                            </button>
+                        </div>
+
+                        <div className="p-6 overflow-y-auto space-y-5 text-sm">
+                            <div className="space-y-2">
+                                <h4 className="font-semibold text-slate-800 flex items-center gap-2 text-xs uppercase tracking-wider text-indigo-600">
+                                    1. Start FastAPI with Uvicorn
+                                </h4>
+                                <p className="text-slate-600 text-xs">
+                                    Ensure your server is serving requests at target host <code className="bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-md font-mono">{baseUrl}</code>.
+                                </p>
+                                <div className="bg-slate-900 p-3 rounded-2xl text-emerald-400 font-mono text-xs shadow-inner">
+                                    uvicorn main:app --reload --port 8000
+                                </div>
+                            </div>
+
+                            <div className="space-y-2">
+                                <div className="flex justify-between items-center">
+                                    <h4 className="font-semibold text-slate-800 text-xs uppercase tracking-wider text-indigo-600">2. Reference FastAPI Endpoint Code</h4>
+                                    <button 
+                                        onClick={() => {
+                                            navigator.clipboard.writeText(pythonSnippet);
+                                            setCopied(true);
+                                            setTimeout(() => setCopied(false), 2000);
+                                        }}
+                                        className="text-xs px-3 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg font-medium flex items-center gap-1.5 transition-colors"
+                                    >
+                                        {copied ? <CheckIcon className="w-3.5 h-3.5 text-emerald-600" /> : <CopyIcon className="w-3.5 h-3.5" />}
+                                        {copied ? 'Copied' : 'Copy Code'}
+                                    </button>
+                                </div>
+                                <pre className="bg-slate-900 p-4 rounded-2xl text-slate-200 text-xs font-mono overflow-x-auto max-h-56 shadow-inner">
+                                    {pythonSnippet}
+                                </pre>
+                            </div>
+                        </div>
+
+                        <div className="p-4 border-t border-slate-200/60 bg-white/40 flex justify-end">
+                            <button onClick={onClose} className="glass-button-primary px-5 py-2 text-white font-medium text-xs rounded-xl">
+                                Done
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const App = () => {
+            const [baseUrl, setBaseUrl] = useState(() => localStorage.getItem('liquid_router_baseUrl') || 'http://127.0.0.1:8000');
+            const [connectionStatus, setConnectionStatus] = useState('idle'); // 'idle' | 'testing' | 'connected' | 'error'
+
+            const [threads, setThreads] = useState(() => {
+                const saved = localStorage.getItem('liquid_router_threads');
+                if (saved) {
+                    try { return JSON.parse(saved); } catch (e) {}
+                }
+                const initialId = generateUUID();
+                return [{ id: initialId, title: 'Workflow Session #1', messages: [], updatedAt: Date.now() }];
+            });
+
+            const [activeThreadId, setActiveThreadId] = useState(() => threads[0]?.id || generateUUID());
+            const [inputValue, setInputValue] = useState('');
+            const [isLoading, setIsLoading] = useState(false);
+
+            const [debugLogs, setDebugLogs] = useState([]);
+            const [isDebugOpen, setIsDebugOpen] = useState(false);
+            const [isSetupOpen, setIsSetupOpen] = useState(false);
+            const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+            const [searchQuery, setSearchQuery] = useState('');
+
+            const messagesEndRef = useRef(null);
+
+            useEffect(() => {
+                localStorage.setItem('liquid_router_threads', JSON.stringify(threads));
+            }, [threads]);
+
+            useEffect(() => {
+                localStorage.setItem('liquid_router_baseUrl', baseUrl);
+            }, [baseUrl]);
+
+            const currentThread = useMemo(() => {
+                return threads.find(t => t.id === activeThreadId) || threads[0];
+            }, [threads, activeThreadId]);
+
+            const currentMessages = currentThread?.messages || [];
+
+            useEffect(() => {
+                messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+            }, [currentMessages, isLoading]);
+
+            const testConnection = async () => {
+                setConnectionStatus('testing');
+                try {
+                    const res = await fetch(`${baseUrl}/docs`, { method: 'GET', mode: 'cors' });
+                    if (res.ok || res.status === 200 || res.status === 404) {
+                        setConnectionStatus('connected');
+                    } else {
+                        setConnectionStatus('error');
+                    }
+                } catch (err) {
+                    setConnectionStatus('error');
+                }
+            };
+
+            useEffect(() => {
+                testConnection();
+            }, []);
+
+            const handleNewChat = () => {
+                const newId = generateUUID();
+                const newThread = {
+                    id: newId,
+                    title: `New Session #${threads.length + 1}`,
+                    messages: [],
+                    updatedAt: Date.now()
+                };
+                setThreads(prev => [newThread, ...prev]);
+                setActiveThreadId(newId);
+            };
+
+            const handleDeleteThread = (id, e) => {
+                e.stopPropagation();
+                if (threads.length <= 1) {
+                    const freshId = generateUUID();
+                    setThreads([{ id: freshId, title: 'Workflow Session #1', messages: [], updatedAt: Date.now() }]);
+                    setActiveThreadId(freshId);
+                    return;
+                }
+                const filtered = threads.filter(t => t.id !== id);
+                setThreads(filtered);
+                if (activeThreadId === id) setActiveThreadId(filtered[0].id);
+            };
+
+            const handleSendMessage = async (textToSend) => {
+                const query = textToSend || inputValue;
+                if (!query.trim() || isLoading) return;
+
+                const userMsg = {
+                    role: 'user',
+                    content: query,
+                    timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                };
+
+                const updatedMessages = [...currentMessages, userMsg];
+                setThreads(prev => prev.map(t => {
+                    if (t.id === activeThreadId) {
+                        const title = t.messages.length === 0 ? query.slice(0, 26) + (query.length > 26 ? '...' : '') : t.title;
+                        return { ...t, title, messages: updatedMessages, updatedAt: Date.now() };
+                    }
+                    return t;
+                }));
+
+                setInputValue('');
+                setIsLoading(true);
+
+                const startTime = performance.now();
+                const endpoint = `${baseUrl.replace(/\/$/, '')}/chat`;
+
+                const requestPayload = {
+                    messages: updatedMessages.map(m => ({
+                        role: m.role,
+                        content: m.content
+                    })),
+                    thread_id: activeThreadId
+                };
+
+                try {
+                    const response = await fetch(endpoint, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(requestPayload)
+                    });
+
+                    const duration = Math.round(performance.now() - startTime);
+
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        let errorJson;
+                        try { errorJson = JSON.parse(errorText); } catch(e) { errorJson = { detail: errorText }; }
+
+                        setDebugLogs(prev => [{
+                            url: endpoint,
+                            threadId: activeThreadId,
+                            requestBody: requestPayload,
+                            responseBody: errorJson,
+                            status: response.status,
+                            duration,
+                            timestamp: new Date().toLocaleTimeString(),
+                            error: true
+                        }, ...prev]);
+
+                        const assistantErrorMsg = {
+                            role: 'assistant',
+                            content: `⚠️ **FastAPI Error (${response.status})**: ${errorJson.detail || 'Workflow processing failed.'}`,
+                            isError: true,
+                            errorDetails: `Endpoint returned HTTP status ${response.status}`,
+                            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                        };
+
+                        setThreads(prev => prev.map(t => {
+                            if (t.id === activeThreadId) {
+                                return { ...t, messages: [...t.messages, assistantErrorMsg] };
+                            }
+                            return t;
+                        }));
+                        setConnectionStatus('error');
+                    } else {
+                        const data = await response.json();
+
+                        setDebugLogs(prev => [{
+                            url: endpoint,
+                            threadId: activeThreadId,
+                            requestBody: requestPayload,
+                            responseBody: data,
+                            status: response.status,
+                            duration,
+                            timestamp: new Date().toLocaleTimeString(),
+                            error: false
+                        }, ...prev]);
+
+                        const assistantReplyMsg = {
+                            role: 'assistant',
+                            content: data.reply || "No reply string returned by backend router workflow.",
+                            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                        };
+
+                        setThreads(prev => prev.map(t => {
+                            if (t.id === activeThreadId) {
+                                return { ...t, messages: [...t.messages, assistantReplyMsg] };
+                            }
+                            return t;
+                        }));
+                        setConnectionStatus('connected');
+                    }
+                } catch (err) {
+                    const duration = Math.round(performance.now() - startTime);
+
+                    setDebugLogs(prev => [{
+                        url: endpoint,
+                        threadId: activeThreadId,
+                        requestBody: requestPayload,
+                        responseBody: { message: err.message },
+                        status: 0,
+                        duration,
+                        timestamp: new Date().toLocaleTimeString(),
+                        error: true
+                    }, ...prev]);
+
+                    const assistantErrorMsg = {
+                        role: 'assistant',
+                        content: `❌ **Connection Blocked / Failed**: Could not reach FastAPI endpoint \`${endpoint}\`. Ensure CORS middleware is enabled.`,
+                        isError: true,
+                        errorDetails: err.message || 'Fetch request failed',
+                        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                    };
+
+                    setThreads(prev => prev.map(t => {
+                        if (t.id === activeThreadId) {
+                            return { ...t, messages: [...t.messages, assistantErrorMsg] };
+                        }
+                        return t;
+                    }));
+                    setConnectionStatus('error');
+                } finally {
+                    setIsLoading(false);
+                }
+            };
+
+            const starterPrompts = [
+                "Summarize how LangChain Graph handles memory state",
+                "Draft a python router agent with FastAPI",
+                "Format a structured JSON response schema",
+                "Explain multi-agent delegation in AI workflows"
+            ];
+
+            const filteredThreads = threads.filter(t => 
+                t.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                t.id.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+
+            return (
+                <div className="h-full flex flex-col relative overflow-hidden">
+                    
+                    {/* Liquid Glass Header Navbar */}
+                    <header className="h-16 px-6 flex items-center justify-between shrink-0 z-20 glass-panel border-b border-white/80">
+                        {/* Logo & Thread Info */}
+                        <div className="flex items-center gap-3">
+                            <div className="p-2 bg-gradient-to-tr from-indigo-500 via-indigo-600 to-violet-600 text-white rounded-2xl shadow-lg shadow-indigo-500/25 border border-white/60">
+                                <SparklesIcon className="w-5 h-5" />
+                            </div>
+                            <div>
+                                <div className="flex items-center gap-2">
+                                    <h1 className="font-extrabold text-base tracking-tight text-slate-800">Router Agent</h1>
+                                    <span className="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600 border border-indigo-100">
+                                        Liquid Glass UI
+                                    </span>
+                                </div>
+                                <p className="text-[11px] text-slate-500 font-mono">
+                                    Thread ID: <span className="text-indigo-600 font-semibold">{activeThreadId.slice(0, 8)}...</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Status & Control Actions */}
+                        <div className="flex items-center gap-2.5">
+                            {/* Server Status Pill */}
+                            <button 
+                                onClick={() => setIsSettingsOpen(true)}
+                                className="glass-pill px-3 py-1.5 rounded-2xl flex items-center gap-2 text-xs font-medium text-slate-700"
+                            >
+                                <span className={`w-2 h-2 rounded-full ${
+                                    connectionStatus === 'connected' ? 'bg-emerald-500 animate-pulse' :
+                                    connectionStatus === 'testing' ? 'bg-amber-400 animate-ping' :
+                                    'bg-red-500'
+                                }`} />
+                                <span className="font-mono text-[11px] text-slate-600 truncate max-w-[150px]">{baseUrl}</span>
+                                <SettingsIcon className="w-3.5 h-3.5 text-slate-400 ml-1" />
+                            </button>
+
+                            {/* Dev Inspector Button */}
+                            <button
+                                onClick={() => setIsDebugOpen(!isDebugOpen)}
+                                className={`px-3.5 py-1.5 rounded-2xl text-xs font-semibold flex items-center gap-1.5 transition-all glass-pill ${
+                                    isDebugOpen ? 'bg-indigo-600/10 text-indigo-600 border-indigo-300' : 'text-slate-700'
+                                }`}
+                            >
+                                <TerminalIcon className="w-4 h-4 text-indigo-600" />
+                                <span className="hidden sm:inline">Inspector</span>
+                                {debugLogs.length > 0 && (
+                                    <span className="ml-0.5 px-1.5 py-0.2 rounded-full bg-indigo-600 text-white text-[10px] font-bold">
+                                        {debugLogs.length}
+                                    </span>
+                                )}
+                            </button>
+
+                            {/* Help Modal Toggle */}
+                            <button
+                                onClick={() => setIsSetupOpen(true)}
+                                className="p-2 text-slate-500 hover:text-slate-800 glass-pill rounded-2xl"
+                                title="FastAPI Setup Guide"
+                            >
+                                <HelpCircleIcon className="w-4 h-4" />
+                            </button>
+                        </div>
+                    </header>
+
+                    {/* Main Workbench Body */}
+                    <div className="flex-1 flex overflow-hidden">
+                        
+                        {/* Sidebar */}
+                        <aside className="w-72 glass-panel border-r border-white/80 flex flex-col shrink-0 hidden md:flex z-10 m-3 mr-0 rounded-3xl">
+                            {/* New Thread Action */}
+                            <div className="p-3">
+                                <button
+                                    onClick={handleNewChat}
+                                    className="w-full py-2.5 px-4 glass-button-primary text-white font-semibold text-xs rounded-2xl flex items-center justify-center gap-2 shadow-md active:scale-98 transition-all"
+                                >
+                                    <PlusIcon className="w-4 h-4" /> New Session Thread
+                                </button>
+                            </div>
+
+                            {/* Liquid Search Box */}
+                            <div className="px-3 pb-2">
+                                <input
+                                    type="text"
+                                    placeholder="Search session history..."
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    className="w-full px-3.5 py-2 glass-card rounded-2xl text-xs text-slate-700 placeholder-slate-400 focus:outline-none focus:border-indigo-400 transition-all"
+                                />
+                            </div>
+
+                            {/* Thread list */}
+                            <div className="flex-1 overflow-y-auto px-2 space-y-1.5">
+                                {filteredThreads.map(thread => {
+                                    const isActive = thread.id === activeThreadId;
+                                    return (
+                                        <div
+                                            key={thread.id}
+                                            onClick={() => setActiveThreadId(thread.id)}
+                                            className={`group relative flex items-center justify-between p-3 rounded-2xl cursor-pointer text-xs transition-all border ${
+                                                isActive 
+                                                    ? 'bg-white/90 text-indigo-600 border-indigo-200/80 font-semibold shadow-xs' 
+                                                    : 'text-slate-600 hover:bg-white/60 border-transparent'
+                                            }`}
+                                        >
+                                            <div className="flex flex-col truncate pr-5">
+                                                <span className="truncate">{thread.title}</span>
+                                                <span className="text-[10px] font-mono text-slate-400">
+                                                    ID: {thread.id.slice(0, 10)}...
+                                                </span>
+                                            </div>
+                                            <button
+                                                onClick={(e) => handleDeleteThread(thread.id, e)}
+                                                className="opacity-0 group-hover:opacity-100 p-1 text-slate-400 hover:text-red-500 transition-opacity rounded-lg"
+                                                title="Delete session"
+                                            >
+                                                <TrashIcon className="w-3.5 h-3.5" />
+                                            </button>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+
+                            <div className="p-3 border-t border-slate-200/50 text-[11px] text-slate-400 flex justify-between items-center font-medium">
+                                <span>{threads.length} Session{threads.length > 1 ? 's' : ''}</span>
+                                <button onClick={testConnection} className="hover:text-indigo-600 flex items-center gap-1">
+                                    <RefreshIcon className="w-3 h-3" /> Ping Server
+                                </button>
+                            </div>
+                        </aside>
+
+                        {/* Chat Feed */}
+                        <main className="flex-1 flex flex-col relative overflow-hidden">
+                            <div className="flex-1 overflow-y-auto px-4 md:px-12 py-6 space-y-3 pb-32">
+                                {currentMessages.length === 0 ? (
+                                    <div className="h-full flex flex-col items-center justify-center text-center max-w-xl mx-auto py-12">
+                                        <div className="p-4 rounded-3xl glass-card text-indigo-600 mb-4 shadow-lg border border-white">
+                                            <BotIcon className="w-10 h-10" />
+                                        </div>
+                                        <h2 className="text-xl font-extrabold text-slate-800 mb-2">Router Agent Workbench</h2>
+                                        <p className="text-xs text-slate-500 leading-relaxed mb-6">
+                                            Connected to <code className="bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-md font-mono">{baseUrl}/chat</code> with active thread <code className="bg-slate-200/60 text-slate-700 px-2 py-0.5 rounded-md font-mono">{activeThreadId.slice(0, 8)}</code>.
+                                        </p>
+
+                                        {/* Starter Prompts */}
+                                        <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-left">
+                                            {starterPrompts.map((prompt, i) => (
+                                                <button
+                                                    key={i}
+                                                    onClick={() => handleSendMessage(prompt)}
+                                                    className="p-3.5 glass-card hover:bg-white rounded-2xl text-xs text-slate-700 hover:text-indigo-600 transition-all text-left shadow-xs flex justify-between items-center group border border-white"
+                                                >
+                                                    <span>{prompt}</span>
+                                                    <span className="text-slate-400 group-hover:text-indigo-600 transition-colors">→</span>
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ) : (
+                                    currentMessages.map((msg, index) => (
+                                        <ChatMessage key={index} message={msg} />
+                                    ))
+                                )}
+
+                                {isLoading && (
+                                    <div className="flex gap-3 my-4 justify-start">
+                                        <div className="w-9 h-9 rounded-2xl bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-md">
+                                            <BotIcon className="w-5 h-5 animate-pulse" />
+                                        </div>
+                                        <div className="glass-card rounded-3xl p-4 rounded-tl-xs flex items-center gap-2 border border-white">
+                                            <span className="text-xs text-slate-500 font-medium">Invoking Agent Workflow...</span>
+                                            <div className="flex space-x-1">
+                                                <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-bounce"></div>
+                                                <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-bounce [animation-delay:0.2s]"></div>
+                                                <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-bounce [animation-delay:0.4s]"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                                <div ref={messagesEndRef} />
+                            </div>
+
+                            {/* Floating Liquid Input Bar */}
+                            <div className="absolute bottom-4 inset-x-0 px-4 md:px-12 pointer-events-none">
+                                <div className="max-w-4xl mx-auto pointer-events-auto">
+                                    <form 
+                                        onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }}
+                                        className="glass-input-capsule rounded-3xl p-2.5 flex flex-col gap-2 shadow-2xl border border-white"
+                                    >
+                                        <textarea
+                                            value={inputValue}
+                                            onChange={(e) => setInputValue(e.target.value)}
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter' && !e.shiftKey) {
+                                                    e.preventDefault();
+                                                    handleSendMessage();
+                                                }
+                                            }}
+                                            placeholder="Ask or command the router agent... (Shift+Enter for line break)"
+                                            rows="2"
+                                            className="w-full bg-transparent px-3 py-1 text-sm text-slate-800 placeholder-slate-400 focus:outline-none resize-none max-h-32"
+                                        />
+
+                                        <div className="flex items-center justify-between pt-1 border-t border-slate-200/50 px-1">
+                                            <div className="flex items-center gap-2">
+                                                <span className="glass-pill px-2.5 py-1 rounded-xl text-[10px] font-mono text-indigo-600 font-semibold">
+                                                    thread: {activeThreadId.slice(0, 8)}
+                                                </span>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setActiveThreadId(generateUUID())}
+                                                    className="text-[11px] text-slate-500 hover:text-indigo-600 transition-colors font-medium"
+                                                >
+                                                    Switch Thread
+                                                </button>
+                                            </div>
+
+                                            <button
+                                                type="submit"
+                                                disabled={!inputValue.trim() || isLoading}
+                                                className="glass-button-primary px-4 py-2 text-white font-semibold text-xs rounded-2xl flex items-center gap-1.5 disabled:opacity-40"
+                                            >
+                                                <span>Send</span>
+                                                <SendIcon className="w-3.5 h-3.5" />
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                        </main>
+                    </div>
+
+                    {/* Connection Settings Modal */}
+                    {isSettingsOpen && (
+                        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/30 backdrop-blur-md">
+                            <div className="glass-panel border border-white rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+                                <div className="flex justify-between items-center border-b border-slate-200/60 pb-3">
+                                    <h3 className="font-bold text-slate-800">Target Server Settings</h3>
+                                    <button onClick={() => setIsSettingsOpen(false)} className="text-slate-400 hover:text-slate-600">
+                                        <XIcon className="w-5 h-5" />
+                                    </button>
+                                </div>
+
+                                <div className="space-y-3 text-xs">
+                                    <div>
+                                        <label className="block text-slate-700 font-medium mb-1">FastAPI Base URL</label>
+                                        <input
+                                            type="text"
+                                            value={baseUrl}
+                                            onChange={(e) => setBaseUrl(e.target.value)}
+                                            placeholder="http://127.0.0.1:8000"
+                                            className="w-full glass-card rounded-xl p-2.5 font-mono text-indigo-600 focus:outline-none focus:border-indigo-400"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-slate-700 font-medium mb-1">Active Thread ID</label>
+                                        <div className="flex gap-2">
+                                            <input
+                                                type="text"
+                                                value={activeThreadId}
+                                                onChange={(e) => setActiveThreadId(e.target.value)}
+                                                className="flex-1 glass-card rounded-xl p-2.5 font-mono text-slate-700 focus:outline-none focus:border-indigo-400"
+                                            />
+                                            <button
+                                                onClick={() => setActiveThreadId(generateUUID())}
+                                                className="px-3 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-xl font-medium"
+                                            >
+                                                New
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div className="pt-2 flex justify-between items-center">
+                                        <button
+                                            onClick={testConnection}
+                                            className="glass-pill px-3 py-1.5 rounded-xl font-medium flex items-center gap-1"
+                                        >
+                                            <RefreshIcon className="w-3.5 h-3.5" /> Test Connection
+                                        </button>
+                                        <span className={`font-bold ${connectionStatus === 'connected' ? 'text-emerald-600' : 'text-red-500'}`}>
+                                            {connectionStatus.toUpperCase()}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div className="border-t border-slate-200/60 pt-3 flex justify-end">
+                                    <button
+                                        onClick={() => setIsSettingsOpen(false)}
+                                        className="glass-button-primary px-4 py-2 text-white font-medium text-xs rounded-xl"
+                                    >
+                                        Save
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* API Inspector Drawer */}
+                    <DebugInspector
+                        logs={debugLogs}
+                        isOpen={isDebugOpen}
+                        onClose={() => setIsDebugOpen(false)}
+                        onClearLogs={() => setDebugLogs([])}
+                    />
+
+                    {/* Setup Guide Modal */}
+                    <SetupGuideModal
+                        isOpen={isSetupOpen}
+                        onClose={() => setIsSetupOpen(false)}
+                        baseUrl={baseUrl}
+                    />
+                </div>
+            );
+        };
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+</html>
